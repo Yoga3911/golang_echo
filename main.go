@@ -122,19 +122,20 @@ func CreateUserController(c echo.Context) error {
 }
 
 func root(c echo.Context) error {
-	return helper.Helper(c, http.StatusOK, "OK!", nil)
+	return c.String(http.StatusOK, "OK!")
 }
 
 // ---------------------------------------------------
 func main() {
 	e := echo.New()
 	// routing with query parameter
-	e.GET("", root)
-	e.GET("/users", GetUsersController)
-	e.GET("/users/:id", GetUserController)
-	e.POST("/users", CreateUserController)
-	e.DELETE("/users/:id", DeleteUserController)
-	e.PUT("/users/:id", UpdateUserController)
+	e.GET("/", root)
+	api := e.Group("/api/v1")
+	api.GET("/users", GetUsersController)
+	api.GET("/users/:id", GetUserController)
+	api.POST("/users", CreateUserController)
+	api.DELETE("/users/:id", DeleteUserController)
+	api.PUT("/users/:id", UpdateUserController)
 
 	// start the server, and log if it fails
 	e.Logger.Fatal(e.Start(":8000"))
