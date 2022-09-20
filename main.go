@@ -115,16 +115,21 @@ func CreateUserController(c echo.Context) error {
 
 	if result := strings.Contains(user.Email, "@"); !result {
 		return helper.Helper(c, http.StatusBadRequest, "Invalid email format", user)
-	} 
+	}
 
 	users = append(users, user)
 	return helper.Helper(c, http.StatusOK, "Success create User", user)
+}
+
+func root(c echo.Context) error {
+	return helper.Helper(c, http.StatusOK, "OK!", nil)
 }
 
 // ---------------------------------------------------
 func main() {
 	e := echo.New()
 	// routing with query parameter
+	e.GET("", root)
 	e.GET("/users", GetUsersController)
 	e.GET("/users/:id", GetUserController)
 	e.POST("/users", CreateUserController)
